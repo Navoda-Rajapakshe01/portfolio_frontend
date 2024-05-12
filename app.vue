@@ -1,35 +1,44 @@
 <template>
   <div class="navbar">
-    <ul>
-      <li><a href="#contact">Contact</a></li>
-      <li><a href="#resume">Resume</a></li>
-      <li><a href="#project">Projects</a></li>
-      <li><a href="#about">About</a></li>
-     <li><a class="active" href="#home">Home</a></li>
+    <ul class="navul">
+      <li ><a href="#contact">Contact</a></li>
+      <li ><a href="#resume">Resume</a></li>
+      <li ><a href="#project">Projects</a></li>
+      <li ><a href="#about">About</a></li>
+     <li ><a class="active" href="#home">Home</a></li>
 </ul>
   </div>
-  <div class="container">
-  <div class="description">
-    <h1>NAVODA RAJAPAKSHE</h1>
-    <p>A first year ITM undergraduate at Faculty of Information Technology, University of Moratuwa, Sri Lanka. .</p>
+
+  <div>
+    <h1>{{ name }}</h1>
+    <h2>Projects</h2>
+    <div v-if="pending1">Loading...</div>
+    <ul>
+      <li v-for="project in projects" :key="project.name">
+      <h2>{{project.name}}</h2>
+        <p>{{project.description}}</p>
+      </li>
+    </ul>
   </div>
-  <div class="image">
-    <img src="C:\Users\acer\Desktop\portfolio\portfolio_nuxt\portfolio_frontend\portfolio\homeimage.webp" alt="Image">
+  <div>
+    <h2>Skill</h2>
+    <div v-if="pending2">Loading...</div>
+    <ul>
+      <li v-for="skill in skill" :key="skill.name">
+        <h2>{{skill.name}}</h2>
+        <p>{{skill.description}}</p>
+      </li>
+    </ul>
   </div>
-</div>
 </template>
 <style>
 
-body {
-  background-color: #000000; 
-  background-image: url("C:\Users\acer\Desktop\portfolio\portfolio_nuxt\portfolio_frontend\portfolio\homebackground.jpg"); 
-  background-size: cover;
-}
+
 .navbar{
   margin: 30px;
 }
 
-ul {
+.navbar ul {
   list-style-type: none;
   font-family: sans-serif;
   margin: 20;
@@ -37,62 +46,27 @@ ul {
   overflow: hidden;
 }
 
-li {
+.navbar li {
   float: right;
 }
 
-li a {
+.navbar li a {
   display: block;
-  color: white;
+  color: black;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
 }
-.active{
+.navbar li a .active{
   color: #007EA7;
 }
-h1{
-  color: white;
-  font-family: sans-serif;
-  font-size: 50px;
-}
-.container {
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between; 
-    max-width: 1020px; 
-    margin: 0 auto; 
-    padding: 20px 10px;
-  }
 
-  .description {
-    flex: 1;
-    margin-right: 40px; 
-    color: white;
-    font-size: 20px;
-    font-family: sans-serif;
-  }
-
-  .image {
-    flex: 1; 
-    
-  }
-
-  img {
-    max-width: 100%; 
-    height: auto;
-    margin: 40px;
-    border-radius: 30px;
-  }
 </style>
 
-<script>
-export default {
-  css: [
-    '~/assets/global.css'
-  ]
-}
-
+<script setup>
+ const name = "Navoda Rajapakshe" ;
+const {data: projects, pending1, error1} = useFetch('http://localhost:5000/projects');
+const {data: skill, pending2, error2 } = useFetch('http://localhost:5000/skill');
 </script>
 
 
