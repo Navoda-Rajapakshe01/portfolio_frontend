@@ -31,9 +31,15 @@
     </ul>
   </div>
 </template>
+
+<script setup>
+ const name = "Navoda Rajapakshe" ;
+const {data: projects, pending1, error1} = useFetch('http://localhost:5000/projects'); //usefetch calls for data from projects
+const {data: skill, pending2, error2 } = useFetch('http://localhost:5000/skill');
+</script>
+
+
 <style>
-
-
 .navbar{
   margin: 30px;
 }
@@ -60,14 +66,9 @@
 .navbar li a .active{
   color: #007EA7;
 }
-
 </style>
 
-<script setup>
- const name = "Navoda Rajapakshe" ;
-const {data: projects, pending1, error1} = useFetch('http://localhost:5000/projects');
-const {data: skill, pending2, error2 } = useFetch('http://localhost:5000/skill');
-</script>
+
 
 
 
