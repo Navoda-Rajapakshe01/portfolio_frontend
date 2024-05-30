@@ -16,6 +16,7 @@
     <ul>
       <li v-for="project in projects" :key="project?._id">
       <h2>{{project?.name}}</h2>
+      <h3>Project ID: {{project?._id}}</h3>
         <p>{{project?.description}}</p>
       </li>
     </ul>
@@ -105,9 +106,12 @@ const createProject = async () => {
   if (!response.ok) {
       throw new Error('Failed to create project');
     }
-  newProject.value.name = '';
-  newProject.value.description = '';
-  await refreshProjects();
+    //add the new project to the list
+    const project = await response.json();
+    projects.value.push(project);
+    //clear the input field
+    newProject.value.name = '';
+    newProject.value.description = '';
   return true;
   }catch (error) {
     console.error('Error creating project:', error.message);
@@ -125,12 +129,15 @@ const deleteProject = async (_id) => {
     if (!response.ok) {
       throw new Error('Failed to delete project');
     }
+    //remove the project from the list
+    const index = projects.value.findIndex(project => project._id === _id);
+    if (index !== -1) {
+      projects.value.splice(index, 1);
+    }
+    //clear the input field
     projectId.value = '';
-    await refreshProjects();
-    return true;
   } catch (error) {
     console.error('Error deleting project:', error.message);
-    return false;
   }
 }
 
@@ -152,10 +159,16 @@ const updateProject = async (_id) => {
     if (!response.ok) {
       throw new Error('Failed to update project');
     }
+    //update the project in the list
+    const project = projects.value.find(project => project._id === _id);
+    if (project) {
+      project.name = update.value.name;
+      project.description = update.value.description;
+    }
+    //clear the input field
     pId.value = '';
     update.value.name = '';
     update.value.description = '';
-    await refreshProjects();
     return true;
   } catch (error) {
     console.error('Error updating project:', error.message);
@@ -195,24 +208,24 @@ const updateProject = async (_id) => {
 .form-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px; /* Space between the forms */
+  gap: 20px; 
   padding: 20px;
-  justify-content: space-between; /* Ensure forms are evenly spaced */
+  justify-content: space-between; 
 }
 
 .form-container > div {
-  flex: 1; /* Adjust based on the width you want each form to take */
-  min-width: 300px; /* Adjust based on the minimum width of each form */
+  flex: 1; 
+  min-width: 300px; 
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #f9f9f9;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
-  transition: transform 0.2s; /* Smooth transform on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s; 
 }
 
 .form-container > div:hover {
-  transform: scale(1.02); /* Slightly scale up on hover */
+  transform: scale(1.02); 
 }
 
 h2 {
@@ -240,7 +253,7 @@ textarea {
 }
 
 textarea {
-  resize: vertical; /* Allow vertical resize */
+  resize: vertical;
 }
 button {
   border: none;
